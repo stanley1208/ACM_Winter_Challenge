@@ -2,8 +2,6 @@ import requests
 import logging
 from APIKEY import API_KEY
 
-# Set up logging for debugging
-logging.basicConfig(filename="../../OneDrive/文件/GitHub/ACM_Winter_Challenge/study_assistant.log", level=logging.INFO)
 
 # Set the OpenAI API key
 
@@ -70,7 +68,7 @@ def create_study_plan(preferences):
 
 
 def save_study_plan(preferences, plan):
-    with open("../../OneDrive/文件/GitHub/ACM_Winter_Challenge/study_plan.txt", "w") as file:
+    with open("study_plan.txt", "w") as file:
         file.write("=== User Preferences ===\n")
         file.write(f"Subject: {preferences['subject']}\n")
         file.write(f"Hours per day: {preferences['hours']}\n")
@@ -156,3 +154,5 @@ for day, task in tasks.items():
 
 # Track and save progress
 # track_progress(tasks)
+
+

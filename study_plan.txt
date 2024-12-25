@@ -1,7 +1,9 @@
 === User Preferences ===
-Subject: nlp
+Subject: english
 Hours per day: 1
-Days to study: 1
+Days to study: 3
 
 === Study Plan ===
-Day 1: Study 1 hours on Here is a suggested study plan for Natural Language Processing (NLP) over one day:
+Day 1: Study 1 hours on Day 1: Vocabulary Building and Grammar
+Day 2: Study 1 hours on - Focus on improving your vocabulary knowledge by learning new words, idioms, phrases, and their usage.
+Day 3: Study 1 hours on - Spend time on improving grammar skills that include understanding the aspects of nouns, verbs, adjectives, adverbs, tenses, parts of speech, prepositions, conjunctions, etc. You can use grammar workbooks or online resources.
