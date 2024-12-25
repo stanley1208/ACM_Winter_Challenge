@@ -1,16 +1,7 @@
-User Preferences:
-Subject: Natural Language Processing
-Hours per day: 3
-Days to study: 10
+=== User Preferences ===
+Subject: nlp
+Hours per day: 1
+Days to study: 1
 
-Study Plan:
-Day 1: Study 3 hours on Introduction of Natural Language Processing
-Day 2: Study 3 hours on Chapter 1 of Natural Language Processing
-Day 3: Study 3 hours on Chapter 2 of Natural Language Processing
-Day 4: Study 3 hours on Chapter 3 of Natural Language Processing
-Day 5: Study 3 hours on Chapter 4 of Natural Language Processing
-Day 6: Study 3 hours on Conclusion of Natural Language Processing
-Day 7: Study 3 hours on Introduction of Natural Language Processing
-Day 8: Study 3 hours on Chapter 1 of Natural Language Processing
-Day 9: Study 3 hours on Chapter 2 of Natural Language Processing
-Day 10: Study 3 hours on Chapter 3 of Natural Language Processing
+=== Study Plan ===
+Day 1: Study 1 hours on Here is a suggested study plan for Natural Language Processing (NLP) over one day:

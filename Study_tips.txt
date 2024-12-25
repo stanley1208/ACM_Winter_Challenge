@@ -1,31 +1,22 @@
 Study Tips and Resourses:
-Sure, here are some tips and resources to aid in studying Natural Language Processing:
+1. Exercise Routine: Get a daily exercise routine. This will help you to understand the various muscle groups worked by each exercise while experiencing it yourself. 
 
-1. **Understand Math Fundamentals**: Strong understanding of Linear Algebra, Probability, and Statistics is a must. Review concepts like vectors, matrices, probability distributions, and statistical measures.
+2. Books: There are great books out there to help you study Gym. Some of the famous authors you might be interested in reading are Arnold Schwarzenegger and Jim Stoppani. 
 
-2. **Learn Python**: Python is widely used for NLP tasks. Familiarize yourself with libraries like NLTK, spaCy, and Gensim.
+3. Videos: There are thousands of fitness videos on YouTube. Some of them explain the science behind the workouts which can be quite helpful. 
 
-3. **Online Courses**:
-   - "Natural Language Processing" by Stanford University on Coursera.
-   - "Natural Language Processing in TensorFlow" by deeplearning.ai on Coursera.
-   - "Intro to Artificial Intelligence" by Sebastian Thrun and Peter Norvig on Udacity which includes a section on NLP.
+4. Apps: Apps are another great resource. From tracking your workouts to showing you how to perform exercises, apps such as MyFitnessPal, Strava, and Nike Training Club can be quite helpful. 
 
-4. **Books**:
-   - "Speech and Language Processing" by Daniel Jurafsky and James H. Martin.
-   - "Natural Language Processing with Python" by Steven Bird, Ewan Klein, and Edward Loper.
+5. Nutrition: Enhancing your knowledge about nutrition can be very helpful for your gym subjects, as nutrition plays a significant role in physical training. 
 
-5. **Grab a Dataset**: Websites like Kaggle provide numerous datasets for NLP tasks. Try your hand at a small project, for example, sentiment analysis or spam detection.
+6. Anatomy Classes: Understanding the human body can enhance your gym studies. This might be more than what's required, but it's always good to know more. 
 
-6. **Work on Coding Skills**: Many NLP tasks involve cleaning and manipulating data. Libraries like Pandas and NumPy are often used.
+7. Join a Training Course: To further enhance your knowledge, you can join a fitness instruction course. 
 
-7. **Learn about Machine Learning**: Techniques like neural networks and deep learning play a vital role in NLP.
+8. Flashcards: They can be a great way to remember things. Write down different exercise types and what muscle groups they target and then go back through them periodically. 
 
-8. **Keep up with Current Research**: Following websites like arXiv and journals can give insight into the latest trends and challenges in NLP.
+9. Practice: The best way to study for gym class is by doing. Try different exercises, understand how your body works and reacts to different types of physical stress. 
 
-9. **Understand Different Models**: Various models such as LSTM, BERT, Transformer are used in different applications. Understand the basics and applicability of these models.
+10. Rest: It's equally important to understand the concept of rest and recovery in physical training. It is one of the important components of an effective workout routine. 
 
-10. **Tutorials**:
-    - "A Gentle Introduction to NLP" on Machine Learning Mastery.
-    - "Natural Language Processing Tutorial" on DataCamp.
-
-Remember, the field of NLP is vast and evolving, keeping a lifelong learning mindset will be beneficial.
+11. Networking: Try speaking to gym instructors or other fitness professionals. They would have a wealth of practical knowledge and tips they could share with you.
