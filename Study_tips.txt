@@ -1,0 +1,31 @@
+Study Tips and Resourses:
+Sure, here are some tips and resources to aid in studying Natural Language Processing:
+
+1. **Understand Math Fundamentals**: Strong understanding of Linear Algebra, Probability, and Statistics is a must. Review concepts like vectors, matrices, probability distributions, and statistical measures.
+
+2. **Learn Python**: Python is widely used for NLP tasks. Familiarize yourself with libraries like NLTK, spaCy, and Gensim.
+
+3. **Online Courses**:
+   - "Natural Language Processing" by Stanford University on Coursera.
+   - "Natural Language Processing in TensorFlow" by deeplearning.ai on Coursera.
+   - "Intro to Artificial Intelligence" by Sebastian Thrun and Peter Norvig on Udacity which includes a section on NLP.
+
+4. **Books**:
+   - "Speech and Language Processing" by Daniel Jurafsky and James H. Martin.
+   - "Natural Language Processing with Python" by Steven Bird, Ewan Klein, and Edward Loper.
+
+5. **Grab a Dataset**: Websites like Kaggle provide numerous datasets for NLP tasks. Try your hand at a small project, for example, sentiment analysis or spam detection.
+
+6. **Work on Coding Skills**: Many NLP tasks involve cleaning and manipulating data. Libraries like Pandas and NumPy are often used.
+
+7. **Learn about Machine Learning**: Techniques like neural networks and deep learning play a vital role in NLP.
+
+8. **Keep up with Current Research**: Following websites like arXiv and journals can give insight into the latest trends and challenges in NLP.
+
+9. **Understand Different Models**: Various models such as LSTM, BERT, Transformer are used in different applications. Understand the basics and applicability of these models.
+
+10. **Tutorials**:
+    - "A Gentle Introduction to NLP" on Machine Learning Mastery.
+    - "Natural Language Processing Tutorial" on DataCamp.
+
+Remember, the field of NLP is vast and evolving, keeping a lifelong learning mindset will be beneficial.
