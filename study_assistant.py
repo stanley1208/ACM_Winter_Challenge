@@ -144,8 +144,8 @@ def main_workflow():
     save_to_file("daily_tasks.json", tasks)
 
     print("\nDetailed Daily Study Tasks:")
-    for day, task in tasks.items():
-        print(f"{day}: {task}")
+    for day, description in tasks.items():
+        print(f"{day}: {description}")
 
 
 main_workflow()
