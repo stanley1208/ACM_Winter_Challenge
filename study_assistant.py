@@ -1,11 +1,7 @@
 import requests
 import logging
 from APIKEY import API_KEY
-
-
-# Set the OpenAI API key
-
-
+import json
 
 def get_user_preferences():
     print("Welcome to the Personalized Study Assistant!")
@@ -67,17 +63,6 @@ def create_study_plan(preferences):
     return plan
 
 
-def save_study_plan(preferences, plan):
-    with open("study_plan.txt", "w") as file:
-        file.write("=== User Preferences ===\n")
-        file.write(f"Subject: {preferences['subject']}\n")
-        file.write(f"Hours per day: {preferences['hours']}\n")
-        file.write(f"Days to study: {preferences['days']}\n\n")
-        file.write("=== Study Plan ===\n")
-        for day, task in plan.items():
-            file.write(f"{day}: {task}\n")
-
-
 def generate_daily_task(subject, topics):
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
@@ -85,36 +70,37 @@ def generate_daily_task(subject, topics):
         "Authorization": f"Bearer {API_KEY}"
     }
 
-    tasks = {}  # Properly initialize tasks as a dictionary
+    prompt = (
+        f"You are a helpful assistant. Provide a list of detailed tasks for the following topics in {subject}:\\n\\n"
+        + "\\n".join([f"- {topic}" for topic in topics])
+    )
 
-    for day, topic in enumerate(topics, start=1):
-        data = {
-            "model": "gpt-4",
-            "messages": [
-                {"role": "system", "content": "You are a helpful assistant for creating study tasks."},
-                {"role": "user",
-                 "content": f"Provide a detailed list of study tasks for the topic '{topic}' in the subject '{subject}', focusing on practical steps and resources."}
+    data = {
+        "model": "gpt-4",
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant for creating study tasks."},
+            {"role": "user", "content": prompt}
+        ]
+    }
 
-            ]
-        }
+    try:
+        response = requests.post(url, headers=headers, json=data, timeout=15)
+        response.raise_for_status()
+        task_list = response.json()['choices'][0]['message']['content'].strip().split("\\n")
+        return {f"Task {i+1}": task.strip() for i, task in enumerate(task_list)}
+    except requests.RequestException as e:
+        logging.error(f"Error fetching tasks: {e}")
+        return {f"Task {i+1}": f"Error: Could not generate tasks for {topic}" for i, topic in enumerate(topics)}
 
-        try:
-            response = requests.post(url, headers=headers, json=data)
-            response.raise_for_status()
-            result = response.json()
-            if result is None:
-                tasks = fallback_tasks(topics)
-            tasks[f"Day {day}"] = result['choices'][0]['message']['content'].strip()
-        except requests.RequestException as e:
-            logging.error(f"Error fetching tasks for {topic}: {e}")
-            tasks[f"Day {day}"] = f"Error: Could not generate tasks for {topic}"
-
-    return tasks
 
 
 def fallback_tasks(topics):
     return {f"Day {i+1}": f"Review the topic: {topic}" for i, topic in enumerate(topics)}
 
+def save_to_file(filename, data):
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+    print(f"Data saved to {filename}")
 
 
 
@@ -144,25 +130,25 @@ def fallback_tasks(topics):
 #             file.write(f"{day}: {task} [{status}]\n")
 #
 
-# Main script workflow
-preferences = get_user_preferences()
-subject = preferences['subject']
+def main_workflow():
+    preferences = get_user_preferences()
+    study_plan = create_study_plan(preferences)
+    save_to_file("study_plan.json", {"preferences": preferences, "study_plan": study_plan})
 
-# Generate and save the study plan
-study_plan = create_study_plan(preferences)
-save_study_plan(preferences, study_plan)
+    print("\nYour Study Plan:")
+    for day, task in study_plan.items():
+        print(f"{day}: {task}")
 
-print("\nYour Study Plan:")
-for day, task in study_plan.items():
-    print(f"{day}: {task}")
+    topics = [task.split("on ")[-1] for task in study_plan.values()]
+    tasks = generate_daily_task(preferences['subject'], topics)
+    save_to_file("daily_tasks.json", tasks)
 
-# Generate detailed daily tasks
-topics = [task.split("on ")[-1] for task in study_plan.values()]  # Extract topics from the plan
-tasks = generate_daily_task(subject, topics)
+    print("\nDetailed Daily Study Tasks:")
+    for day, task in tasks.items():
+        print(f"{day}: {task}")
 
-print("\nDetailed Daily Study Tasks:")
-for day, task in tasks.items():
-    print(f"{day}: {task}")
+
+main_workflow()
 
 # Track and save progress
 # track_progress(tasks)

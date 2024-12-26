@@ -1,7 +1,0 @@
-=== User Preferences ===
-Subject: NLP
-Hours per day: 2
-Days to study: 1
-
-=== Study Plan ===
-Day 1: Study 2 hours on Sure, here's a comprehensive study plan for NLP (Natural Language Processing) that you can follow over a span of 1 day:
