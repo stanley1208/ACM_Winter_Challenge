@@ -92,7 +92,9 @@ def generate_daily_task(subject, topics):
             "model": "gpt-4",
             "messages": [
                 {"role": "system", "content": "You are a helpful assistant for creating study tasks."},
-                {"role": "user", "content": f"Provide a detailed list of tasks to study {topic} in {subject} effectively."}
+                {"role": "user",
+                 "content": f"Provide a detailed list of study tasks for the topic '{topic}' in the subject '{subject}', focusing on practical steps and resources."}
+
             ]
         }
 
@@ -100,12 +102,22 @@ def generate_daily_task(subject, topics):
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
             result = response.json()
+            if result is None:
+                tasks = fallback_tasks(topics)
             tasks[f"Day {day}"] = result['choices'][0]['message']['content'].strip()
         except requests.RequestException as e:
             logging.error(f"Error fetching tasks for {topic}: {e}")
             tasks[f"Day {day}"] = f"Error: Could not generate tasks for {topic}"
 
     return tasks
+
+
+def fallback_tasks(topics):
+    return {f"Day {i+1}": f"Review the topic: {topic}" for i, topic in enumerate(topics)}
+
+
+
+
 
 
 # def track_progress(tasks):
@@ -130,7 +142,7 @@ def generate_daily_task(subject, topics):
 #         for day, task in tasks.items():
 #             status = "✅ Completed" if day in completed else "❌ Pending"
 #             file.write(f"{day}: {task} [{status}]\n")
-
+#
 
 # Main script workflow
 preferences = get_user_preferences()
