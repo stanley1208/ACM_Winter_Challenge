@@ -48,16 +48,30 @@ def create_study_plan(preferences):
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
         topics = response.json()['choices'][0]['message']['content'].strip().split("\n")
+        topics=[topic.strip() for topic in topics if topic.strip()]
     except requests.RequestException as e:
         logging.error(f"Error fetching topics: {e}")
         topics = [f"Day {i}: Placeholder topic" for i in range(1, preferences['days'] + 1)]
 
-    if len(topics) < preferences['days']:
-        print(f"Warning: Not enough topics for {preferences['days']} days. Topics will repeat.")
+    # Use placeholder topics if GPT response is empty
+    if not topics:
+        topics=[f"Topic {i}" for i in range(1, preferences['days'] + 1)]
+
+    # Limit topics to the number of days
+    topics = topics[:preferences['days']]
+
+    cleaned_topics = [
+        topic.split(":")[-1].strip() if topic.split(":")[-1].strip() else f"Topic {i + 1}"
+        for i, topic in enumerate(topics)
+    ]
+
+    if not cleaned_topics[0]:
+        cleaned_topics[0] = "Introduction or Overview"
 
     plan = {}
+
     for day in range(1, preferences['days'] + 1):
-        topic = topics[(day - 1) % len(topics)]  # Cycle through topics if not enough
+        topic = cleaned_topics[(day - 1) % len(cleaned_topics)]  # Cycle through topics if not enough
         plan[f"Day {day}"] = f"Study {preferences['hours']} hours on {topic}"
 
     return plan
@@ -71,8 +85,11 @@ def generate_daily_task(subject, topics):
     }
 
     prompt = (
-        f"You are a helpful assistant. Provide a list of detailed tasks for the following topics in {subject}:\\n\\n"
-        + "\\n".join([f"- {topic}" for topic in topics])
+            f"You are a helpful assistant. For each topic below in {subject}, provide:\n"
+            f"- A detailed task description.\n"
+            f"- Estimated time to complete.\n"
+            f"- Recommended resources (books, videos, or websites).\n\n"
+            + "\n".join([f"- {topic}" for topic in topics])
     )
 
     data = {
@@ -84,14 +101,14 @@ def generate_daily_task(subject, topics):
     }
 
     try:
-        response = requests.post(url, headers=headers, json=data, timeout=15)
+        response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
         task_list = response.json()['choices'][0]['message']['content'].strip().split("\\n")
-        return {f"Task {i+1}": task.strip() for i, task in enumerate(task_list)}
+        return {f"Task {i + 1}": task.strip() if task.strip() else "No detailed task available" for i, task in
+                enumerate(task_list)}
     except requests.RequestException as e:
         logging.error(f"Error fetching tasks: {e}")
-        return {f"Task {i+1}": f"Error: Could not generate tasks for {topic}" for i, topic in enumerate(topics)}
-
+        return {f"Task {i + 1}": f"No detailed task available for {topic}" for i, topic in enumerate(topics)}
 
 
 def fallback_tasks(topics):
@@ -133,24 +150,33 @@ def save_to_file(filename, data):
 def main_workflow():
     preferences = get_user_preferences()
     study_plan = create_study_plan(preferences)
-    save_to_file("study_plan.json", {"preferences": preferences, "study_plan": study_plan})
 
-    print("\nYour Study Plan:")
+    print("\nYour Study Plan:\n"+"="*30)
     for day, task in study_plan.items():
-        print(f"{day}: {task}")
+        print(f"{day}:\n {task}\n")
 
     topics = [task.split("on ")[-1] for task in study_plan.values()]
     tasks = generate_daily_task(preferences['subject'], topics)
     save_to_file("daily_tasks.json", tasks)
 
-    print("\nDetailed Daily Study Tasks:")
-    for day, description in tasks.items():
-        print(f"{day}: {description}")
+    save_to_file(f"{preferences['subject']}_study_plan.json", {"preferences": preferences, "study_plan": study_plan})
+    save_to_file(f"{preferences['subject']}_daily_tasks.json", tasks)
+
+    print("\nDetailed Daily Study Tasks:\n"+"="*30)
+    for task, description in tasks.items():
+        print(f"{task}: {description}\n")
+
+    def show_reminder(tasks):
+        print("\nToday's Task Reminder:")
+        first_task = next(iter(tasks.items()))
+        print(f"{first_task[0]}: {first_task[1]}")
+
+    show_reminder(tasks)
 
 
-main_workflow()
 
 # Track and save progress
 # track_progress(tasks)
 
 
+main_workflow()
