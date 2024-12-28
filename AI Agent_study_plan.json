@@ -1,11 +1,11 @@
 {
     "preferences": {
         "subject": "AI Agent",
-        "hours": 3,
+        "hours": 2,
         "days": 2
     },
     "study_plan": {
-        "Day 1": "Study 3 hours on Topic 1",
-        "Day 2": "Study 3 hours on Topic 2"
+        "Day 1": "Study 2 hours on Topic 1",
+        "Day 2": "Study 2 hours on Topic 2"
     }
 }

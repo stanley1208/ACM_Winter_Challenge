@@ -2,6 +2,19 @@ import requests
 import logging
 from APIKEY import API_KEY
 import json
+import os
+
+
+# Remove old daily task files
+def clean_up_old_files(subject):
+    for file in os.listdir("."):
+        if file.endswith("_daily_tasks.json") and not file.startswith(subject):
+            os.remove(file)
+            print(f"Deleted old file:{file}")
+        if file.endswith("_study_plan.json") and not file.startswith(subject):
+            os.remove(file)
+            print(f"Deleted old file:{file}")
+
 
 def get_user_preferences():
     print("Welcome to the Personalized Study Assistant!")
@@ -85,7 +98,7 @@ def generate_daily_task(subject, topics):
     }
 
     prompt = (
-            f"You are a helpful assistant. For each topic below in {subject}, provide:\n"
+            f"You are a helpful assistant in helping students in Santa Clara University. For each topic below in {subject}, provide:\n"
             f"- A detailed task description.\n"
             f"- Estimated time to complete.\n"
             f"- Recommended resources (books, videos, or websites).\n\n"
@@ -120,36 +133,46 @@ def save_to_file(filename, data):
     print(f"Data saved to {filename}")
 
 
+def mark_completed(tasks):
+    completed=set()
+    try:
+        with open("progress.json", "r") as file:
+            completed=set(json.load(file).get("completed", []))
+
+    except FileNotFoundError:
+        pass
 
 
+    choice = input("\nEnter the task you've completed (e.g., 'Task 1') or press Enter to skip: ").strip()
+    if choice in tasks:
+        completed.add(choice)
+        print(f"Marked {choice} as completed")
+        with open(f"progress.json", "w") as file:
+            json.dump({"completed": list(completed)}, file)
+        print("Progress saved")
 
-# def track_progress(tasks):
-#     completed = set()
-#     while len(completed) < len(tasks):
-#         print("\nYour Study Tasks:")
-#         for day, task in tasks.items():
-#             status = "✅ Completed" if day in completed else "❌ Pending"
-#             print(f"{day}: {task} [{status}]")
-#
-#         choice = input("\nEnter the day you've completed (e.g., 'Day 1'), or type 'exit' to quit: ").strip()
-#         if choice.lower() == "exit":
-#             break
-#         elif choice in tasks and choice not in completed:
-#             completed.add(choice)
-#             print(f"Marked {choice} as completed!")
-#         else:
-#             print("Invalid choice or already marked as completed.")
-#
-#     # Save progress to a file
-#     with open("study_progress.txt", "w") as file:
-#         for day, task in tasks.items():
-#             status = "✅ Completed" if day in completed else "❌ Pending"
-#             file.write(f"{day}: {task} [{status}]\n")
-#
+
+def show_next_task(tasks):
+    try:
+        with open("progress.json", "r") as file:
+            completed=set(json.load(file).get("completed", []))
+
+    except FileNotFoundError:
+        completed=set()
+
+    for task,description in tasks.items():
+        if task not in completed:
+            print(f"\nReminder: {task}:{description}")
+            break
 
 def main_workflow():
+
+
     preferences = get_user_preferences()
     study_plan = create_study_plan(preferences)
+    subject = preferences["subject"]
+    # Clean up old files for other subjects
+    clean_up_old_files(subject)
 
     print("\nYour Study Plan:\n"+"="*30)
     for day, task in study_plan.items():
@@ -157,8 +180,6 @@ def main_workflow():
 
     topics = [task.split("on ")[-1] for task in study_plan.values()]
     tasks = generate_daily_task(preferences['subject'], topics)
-    save_to_file("daily_tasks.json", tasks)
-
     save_to_file(f"{preferences['subject']}_study_plan.json", {"preferences": preferences, "study_plan": study_plan})
     save_to_file(f"{preferences['subject']}_daily_tasks.json", tasks)
 
@@ -166,17 +187,18 @@ def main_workflow():
     for task, description in tasks.items():
         print(f"{task}: {description}\n")
 
-    def show_reminder(tasks):
-        print("\nToday's Task Reminder:")
-        first_task = next(iter(tasks.items()))
-        print(f"{first_task[0]}: {first_task[1]}")
 
-    show_reminder(tasks)
-
+    # Allow the user to mark completed tasks
+    mark_completed(tasks)
+    # Show next pending task
+    show_next_task(tasks)
 
 
-# Track and save progress
-# track_progress(tasks)
+
+
+
 
 
 main_workflow()
+
+
