@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Assistant</title>
+</head>
+<body>
+    <h1>Welcome to the Study Assistant</h1>
+    <form action="/generate" method="POST">
+    <label for="subject">Subject:</label><br>
+    <input type="text" id="subject" name="subject" required><br><br>
+
+    <label for="hours">Hours per day:</label><br>
+    <input type="number" id="hours" name="hours" required><br><br>
+
+    <label for="days">Days to study:</label><br>
+    <input type="number" id="days" name="days" required><br><br>
+
+    <input type="submit" value="Generate Study Plan">
+</form>
+</body>
+</html>

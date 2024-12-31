@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Study Plan</title>
+</head>
+<body>
+    <h1>Your Study Plan</h1>
+    <h2>Study Plan:</h2>
+    <ul>
+        {% for day, task in study_plan.items() %}
+            <li><strong>{{ day }}</strong>: {{ task }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Detailed Daily Study Tasks:</h2>
+    <ul>
+        {% for task, description in tasks.items() %}
+            <li><strong>{{ task }}</strong>: {{ description }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

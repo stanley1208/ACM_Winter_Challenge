@@ -16,30 +16,6 @@ def clean_up_old_files(subject):
             print(f"Deleted old file:{file}")
 
 
-def get_user_preferences():
-    print("Welcome to the Personalized Study Assistant!")
-    subject = input("What subject are you studying? ").strip()
-
-    while True:
-        try:
-            hours = int(input("How many hours per day can you dedicate? "))
-            if hours <= 0:
-                raise ValueError("Hours must be greater than 0.")
-            break
-        except ValueError as e:
-            print(f"Invalid input: {e}. Please enter a valid number.")
-
-    while True:
-        try:
-            days = int(input("How many days do you have to study? "))
-            if days <= 0:
-                raise ValueError("Days must be greater than 0.")
-            break
-        except ValueError as e:
-            print(f"Invalid input: {e}. Please enter a valid number.")
-
-    return {"subject": subject, "hours": hours, "days": days}
-
 
 def create_study_plan(preferences):
     url = "https://api.openai.com/v1/chat/completions"
@@ -165,33 +141,18 @@ def show_next_task(tasks):
             print(f"\nReminder: {task}:{description}")
             break
 
-def main_workflow():
+def main_workflow(preferences):
 
 
-    preferences = get_user_preferences()
+
     study_plan = create_study_plan(preferences)
-    subject = preferences["subject"]
-    # Clean up old files for other subjects
-    clean_up_old_files(subject)
+    topics=[task.split("on ")[-1] for task in study_plan.values()]
+    tasks = generate_daily_task(preferences["subject"], topics)
 
-    print("\nYour Study Plan:\n"+"="*30)
-    for day, task in study_plan.items():
-        print(f"{day}:\n {task}\n")
-
-    topics = [task.split("on ")[-1] for task in study_plan.values()]
-    tasks = generate_daily_task(preferences['subject'], topics)
-    save_to_file(f"{preferences['subject']}_study_plan.json", {"preferences": preferences, "study_plan": study_plan})
-    save_to_file(f"{preferences['subject']}_daily_tasks.json", tasks)
-
-    print("\nDetailed Daily Study Tasks:\n"+"="*30)
-    for task, description in tasks.items():
-        print(f"{task}: {description}\n")
-
-
-    # Allow the user to mark completed tasks
-    mark_completed(tasks)
-    # Show next pending task
-    show_next_task(tasks)
+    return{
+        "study_plan": study_plan,
+        "tasks": tasks,
+    }
 
 
 
@@ -199,6 +160,9 @@ def main_workflow():
 
 
 
-main_workflow()
+
+
+
+
 
 
