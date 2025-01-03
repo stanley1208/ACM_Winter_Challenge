@@ -2,20 +2,81 @@
 <html>
 <head>
     <title>Study Assistant</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    input[type="submit"] {
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    input[type="submit"]:hover {
+        background: #555;
+    }
+    ul {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        list-style-type: none;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007BFF;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
 </head>
 <body>
     <h1>Welcome to the Study Assistant</h1>
-    <form action="/generate" method="POST">
-    <label for="subject">Subject:</label><br>
-    <input type="text" id="subject" name="subject" required><br><br>
+<p>Fill out the form below to generate your personalized study plan:</p>
+<form action="/generate" method="POST">
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" placeholder="Enter your subject" required>
 
-    <label for="hours">Hours per day:</label><br>
-    <input type="number" id="hours" name="hours" required><br><br>
+    <label for="hours">Hours per day:</label>
+    <input type="number" id="hours" name="hours" placeholder="Enter hours (e.g., 3)" required>
 
-    <label for="days">Days to study:</label><br>
-    <input type="number" id="days" name="days" required><br><br>
+    <label for="days">Days to study:</label>
+    <input type="number" id="days" name="days" placeholder="Enter days (e.g., 5)" required>
 
     <input type="submit" value="Generate Study Plan">
 </form>
 </body>
+<footer>
+    <p>&copy; 2025 Study Assistant. All Rights Reserved.</p>
+</footer>
+
 </html>

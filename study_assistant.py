@@ -97,7 +97,8 @@ def generate_daily_task(subject, topics):
                 enumerate(task_list)}
     except requests.RequestException as e:
         logging.error(f"Error fetching tasks: {e}")
-        return {f"Task {i + 1}": f"No detailed task available for {topic}" for i, topic in enumerate(topics)}
+        return {f"Task": task.strip() if task.strip() else "No detailed task available" for i, task in
+                enumerate(task_list)}
 
 
 def fallback_tasks(topics):

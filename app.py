@@ -11,18 +11,15 @@ def home():
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    # Extract form data
-    subject = request.form.get("subject", "").strip()  # Ensure default if missing
-    hours = int(request.form.get("hours", 0))  # Default to 0 if missing
-    days = int(request.form.get("days", 0))  # Default to 0 if missing
-
-    # Build the preferences dictionary
+    subject = request.form.get("subject", "").strip()
+    hours = int(request.form.get("hours", 0))
+    days = int(request.form.get("days", 0))
     preferences = {"subject": subject, "hours": hours, "days": days}
 
-    # Pass preferences to main_workflow
     result = main_workflow(preferences)
+    print("DEBUG: Study Plan:", result["study_plan"])
+    print("DEBUG: Tasks:", result["tasks"])  # Add this to check tasks content
 
-    # Render the result page
     return render_template("result.html", study_plan=result["study_plan"], tasks=result["tasks"])
 
 

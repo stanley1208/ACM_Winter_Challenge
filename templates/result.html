@@ -2,23 +2,87 @@
 <html>
 <head>
     <title>Your Study Plan</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    input[type="submit"] {
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    input[type="submit"]:hover {
+        background: #555;
+    }
+    ul {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        list-style-type: none;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007BFF;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
 </head>
 <body>
     <h1>Your Study Plan</h1>
-    <h2>Study Plan:</h2>
-    <ul>
-        {% for day, task in study_plan.items() %}
-            <li><strong>{{ day }}</strong>: {{ task }}</li>
-        {% endfor %}
-    </ul>
+<h2>Study Plan:</h2>
+<ul>
+    {% for day, task in study_plan.items() %}
+        <li><strong>{{ day }}</strong>: {{ task }}</li>
+    {% endfor %}
+</ul>
 
-    <h2>Detailed Daily Study Tasks:</h2>
-    <ul>
-        {% for task, description in tasks.items() %}
-            <li><strong>{{ task }}</strong>: {{ description }}</li>
-        {% endfor %}
-    </ul>
+<h2>Detailed Daily Study Tasks:</h2>
+<ul>
+    {% for task, description in tasks.items() %}
+        <li><strong>{{ task }}</strong>: {{ description }}</li>
+    {% endfor %}
+</ul>
 
-    <a href="/">Back to Home</a>
+
+<a href="/">Back to Home</a>
+<h2>Debug Tasks:</h2>
+<pre>{{ tasks }}</pre>
+
 </body>
+<footer>
+    <p>&copy; 2025 Study Assistant. All Rights Reserved.</p>
+</footer>
+
 </html>
