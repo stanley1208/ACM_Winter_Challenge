@@ -3,6 +3,28 @@
 <head>
     <title>Your Study Plan</title>
     <style>
+        body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+    }
+    h2 {
+        color: #333;
+    }
+    div {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    ul li {
+        margin-bottom: 5px;
+    }
     body {
         font-family: Arial, sans-serif;
         line-height: 1.6;
@@ -56,6 +78,13 @@
     a:hover {
         text-decoration: underline;
     }
+    .task-block {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+}
 </style>
 
 </head>
@@ -68,17 +97,22 @@
     {% endfor %}
 </ul>
 
-<h2>Detailed Daily Study Tasks:</h2>
-<ul>
-    {% for task, description in tasks.items() %}
-        <li><strong>{{ task }}</strong>: {{ description }}</li>
+<div>
+    {% for task, details in tasks.items() %}
+        <div class="task-block">
+            <h3>{{ task }}</h3>
+            <p>{{ details.replace('\n', '<br>') | safe }}</p>
+        </div>
     {% endfor %}
-</ul>
+</div>
+
+
+
+
+
 
 
 <a href="/">Back to Home</a>
-<h2>Debug Tasks:</h2>
-<pre>{{ tasks }}</pre>
 
 </body>
 <footer>

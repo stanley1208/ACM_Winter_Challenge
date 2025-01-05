@@ -37,7 +37,13 @@ def create_study_plan(preferences):
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
         topics = response.json()['choices'][0]['message']['content'].strip().split("\n")
-        topics=[topic.strip() for topic in topics if topic.strip()]
+        topics = [
+            topic.lstrip("-").strip() if ":" in topic or "-" in topic else topic.strip()
+            for topic in topics
+            if topic.strip()
+        ]
+
+
     except requests.RequestException as e:
         logging.error(f"Error fetching topics: {e}")
         topics = [f"Day {i}: Placeholder topic" for i in range(1, preferences['days'] + 1)]
@@ -74,17 +80,19 @@ def generate_daily_task(subject, topics):
     }
 
     prompt = (
-            f"You are a helpful assistant in helping students in Santa Clara University. For each topic below in {subject}, provide:\n"
-            f"- A detailed task description.\n"
-            f"- Estimated time to complete.\n"
-            f"- Recommended resources (books, videos, or websites).\n\n"
+            f"Generate detailed study tasks for the following {len(topics)} topics related to {subject}:\n"
+            "- Each task should include:\n"
+            "  - A title matching the topic.\n"
+            "  - A detailed task description.\n"
+            "  - Estimated time to complete.\n"
+            "  - Recommended resources (a book, a video, and a website and provide the link also).\n\n"
             + "\n".join([f"- {topic}" for topic in topics])
     )
 
     data = {
         "model": "gpt-4",
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant for creating study tasks."},
+            {"role": "system", "content": "You are helping to create a study plan."},
             {"role": "user", "content": prompt}
         ]
     }
@@ -92,14 +100,49 @@ def generate_daily_task(subject, topics):
     try:
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
-        task_list = response.json()['choices'][0]['message']['content'].strip().split("\\n")
-        return {f"Task {i + 1}": task.strip() if task.strip() else "No detailed task available" for i, task in
-                enumerate(task_list)}
+        task_list = response.json()["choices"][0]["message"]["content"].strip().split("\n\n")
+
+        # Ensure tasks match topics
+        tasks = {}
+        for i, topic in enumerate(topics):
+            if i < len(task_list):
+                tasks[f"Task {i + 1}"] = f"Topic: {topic}\n" + task_list[i].strip()
+            else:
+                tasks[f"Task {i + 1}"] = (
+                    f"Topic: {topic}\n"
+                    f"Task Description: Placeholder content for {topic}.\n"
+                    f"Estimated Time: 2-3 hours\n"
+                    f"Recommended Resources:\n"
+                    f"- Book: 'Artificial Intelligence: A Modern Approach' by Stuart Russell\n"
+                    f"- Website: Coursera course 'AI For Everyone'\n"
+                    f"- Video: 'Introduction to AI' by AI Academy"
+                )
+
+        # Retry logic for missing tasks
+        if len(task_list) < len(topics):
+            missing_topics = topics[len(task_list):]
+            retry_prompt = (
+                    f"Generate tasks for the following remaining topics:\n"
+                    + "\n".join([f"- {topic}" for topic in missing_topics])
+            )
+            retry_response = requests.post(url, headers=headers, json={
+                "model": "gpt-4",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful assistant creating study tasks."},
+                    {"role": "user", "content": retry_prompt}
+                ]
+            })
+            retry_response.raise_for_status()
+            additional_tasks = retry_response.json()["choices"][0]["message"]["content"].strip().split("\n\n")
+
+            for j, task in enumerate(additional_tasks, start=len(task_list)):
+                tasks[f"Task {j + 1}"] = f"Topic: {missing_topics[j - len(task_list)]}\n" + task.strip()
+
+        return tasks
+
     except requests.RequestException as e:
         logging.error(f"Error fetching tasks: {e}")
-        return {f"Task": task.strip() if task.strip() else "No detailed task available" for i, task in
-                enumerate(task_list)}
-
+        return {f"Task {i + 1}": f"Placeholder task for {topic}" for i, topic in enumerate(topics)}
 
 def fallback_tasks(topics):
     return {f"Day {i+1}": f"Review the topic: {topic}" for i, topic in enumerate(topics)}
@@ -143,17 +186,16 @@ def show_next_task(tasks):
             break
 
 def main_workflow(preferences):
-
-
-
     study_plan = create_study_plan(preferences)
-    topics=[task.split("on ")[-1] for task in study_plan.values()]
+    topics = [task.split("on ", 1)[-1].strip() for task in study_plan.values()]
+
     tasks = generate_daily_task(preferences["subject"], topics)
 
-    return{
+    return {
         "study_plan": study_plan,
         "tasks": tasks,
     }
+
 
 
 

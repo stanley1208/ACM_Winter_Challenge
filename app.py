@@ -20,7 +20,8 @@ def generate():
     print("DEBUG: Study Plan:", result["study_plan"])
     print("DEBUG: Tasks:", result["tasks"])  # Add this to check tasks content
 
-    return render_template("result.html", study_plan=result["study_plan"], tasks=result["tasks"])
+    return render_template("result.html",
+                           study_plan=result["study_plan"], tasks=result["tasks"])
 
 
 if __name__ == "__main__":
