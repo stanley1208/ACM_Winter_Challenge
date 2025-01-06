@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,6 +107,13 @@
     {% endfor %}
 </div>
 
+
+
+<form action="/download_txt" method="POST">
+    <textarea name="study_plan" style="display:none;">{{ study_plan }}</textarea>
+    <textarea name="tasks" style="display:none;">{{ tasks }}</textarea>
+    <button type="submit">Download Study Plan as TXT</button>
+</form>
 
 
 

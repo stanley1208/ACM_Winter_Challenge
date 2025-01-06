@@ -195,17 +195,3 @@ def main_workflow(preferences):
         "study_plan": study_plan,
         "tasks": tasks,
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template
 from study_assistant import main_workflow  # Import your study assistant function
+from flask import send_file
+import io
+
 
 app = Flask(__name__)
 
@@ -9,7 +12,25 @@ def home():
     return render_template("index.html")  # HTML form for user input
 
 
-@app.route("/generate", methods=["POST"])
+@app.route("/download_txt", methods=["POST"])
+def download_txt():
+    # Retrieve content from the form
+    study_plan = request.form.get("study_plan", "No study plan available.")
+    tasks = request.form.get("tasks", "No tasks available.")
+
+    # Combine content into a single string
+    file_content = f"Your Study Plan\n\n{study_plan}\n\nDetailed Daily Study Tasks\n\n{tasks}"
+
+    # Create an in-memory text file
+    output = io.BytesIO()
+    output.write(file_content.encode("utf-8"))
+    output.seek(0)
+
+    # Serve the file as a download
+    return send_file(output, as_attachment=True, download_name="study_plan.txt", mimetype="text/plain")
+
+
+@app.route("/generate", methods=["GET", "POST"])
 def generate():
     subject = request.form.get("subject", "").strip()
     hours = int(request.form.get("hours", 0))
