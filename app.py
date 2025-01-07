@@ -14,21 +14,34 @@ def home():
 
 @app.route("/download_txt", methods=["POST"])
 def download_txt():
+    from ast import literal_eval  # Use safer eval alternative
+
     # Retrieve content from the form
-    study_plan = request.form.get("study_plan", "No study plan available.")
-    tasks = request.form.get("tasks", "No tasks available.")
+    study_plan = request.form.get("study_plan", "{}")
+    tasks = request.form.get("tasks", "{}")
 
-    # Combine content into a single string
-    file_content = f"Your Study Plan\n\n{study_plan}\n\nDetailed Daily Study Tasks\n\n{tasks}"
+    # Convert strings to dictionaries
+    try:
+        study_plan_dict = literal_eval(study_plan)
+        tasks_dict = literal_eval(tasks)
+    except (ValueError, SyntaxError):
+        study_plan_dict = {}
+        tasks_dict = {}
 
-    # Create an in-memory text file
+    # Format study plan and tasks
+    formatted_study_plan = "\n".join([f"{day}: {task}" for day, task in study_plan_dict.items()])
+    formatted_tasks = "\n\n".join([f"{task}:\n{details}" for task, details in tasks_dict.items()])
+
+    # Combine content
+    file_content = f"Your Study Plan:\n\n{formatted_study_plan}\n\nDetailed Daily Study Tasks:\n\n{formatted_tasks}"
+
+    # Create in-memory text file
     output = io.BytesIO()
     output.write(file_content.encode("utf-8"))
     output.seek(0)
 
     # Serve the file as a download
     return send_file(output, as_attachment=True, download_name="study_plan.txt", mimetype="text/plain")
-
 
 @app.route("/generate", methods=["GET", "POST"])
 def generate():

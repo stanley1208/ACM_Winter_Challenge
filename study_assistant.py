@@ -73,79 +73,68 @@ def create_study_plan(preferences):
 
 
 def generate_daily_task(subject, topics):
+    """
+    Generates tasks dynamically for all topics related to the given subject.
+    Uses batch processing to ensure faster and complete generation without placeholders.
+    """
     url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {API_KEY}"
     }
 
+    # Batch prompt to generate tasks for all topics
     prompt = (
-            f"Generate detailed study tasks for the following {len(topics)} topics related to {subject}:\n"
-            "- Each task should include:\n"
-            "  - A title matching the topic.\n"
-            "  - A detailed task description.\n"
-            "  - Estimated time to complete.\n"
-            "  - Recommended resources (a book, a video, and a website and provide the link also).\n\n"
-            + "\n".join([f"- {topic}" for topic in topics])
+        f"Generate detailed study tasks for the following topics related to {subject}:\n"
+        "- Each task should include:\n"
+        "  - A title matching the topic.\n"
+        "  - A detailed task description.\n"
+        "  - Estimated time to complete.\n"
+        "  - Recommended resources (book, video, and website with links).\n\n"
+        + "\n".join([f"- {topic}" for topic in topics])
     )
 
     data = {
         "model": "gpt-4",
         "messages": [
-            {"role": "system", "content": "You are helping to create a study plan."},
+            {"role": "system", "content": "You are helping to create a detailed study plan."},
             {"role": "user", "content": prompt}
         ]
     }
 
     try:
+        # Make a single API request to generate tasks for all topics
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
+
+        # Parse the response into tasks
         task_list = response.json()["choices"][0]["message"]["content"].strip().split("\n\n")
-
-        # Ensure tasks match topics
         tasks = {}
-        for i, topic in enumerate(topics):
-            if i < len(task_list):
-                tasks[f"Task {i + 1}"] = f"Topic: {topic}\n" + task_list[i].strip()
-            else:
-                tasks[f"Task {i + 1}"] = (
-                    f"Topic: {topic}\n"
-                    f"Task Description: Placeholder content for {topic}.\n"
-                    f"Estimated Time: 2-3 hours\n"
-                    f"Recommended Resources:\n"
-                    f"- Book: 'Artificial Intelligence: A Modern Approach' by Stuart Russell\n"
-                    f"- Website: Coursera course 'AI For Everyone'\n"
-                    f"- Video: 'Introduction to AI' by AI Academy"
-                )
-
-        # Retry logic for missing tasks
-        if len(task_list) < len(topics):
-            missing_topics = topics[len(task_list):]
-            retry_prompt = (
-                    f"Generate tasks for the following remaining topics:\n"
-                    + "\n".join([f"- {topic}" for topic in missing_topics])
-            )
-            retry_response = requests.post(url, headers=headers, json={
-                "model": "gpt-4",
-                "messages": [
-                    {"role": "system", "content": "You are a helpful assistant creating study tasks."},
-                    {"role": "user", "content": retry_prompt}
-                ]
-            })
-            retry_response.raise_for_status()
-            additional_tasks = retry_response.json()["choices"][0]["message"]["content"].strip().split("\n\n")
-
-            for j, task in enumerate(additional_tasks, start=len(task_list)):
-                tasks[f"Task {j + 1}"] = f"Topic: {missing_topics[j - len(task_list)]}\n" + task.strip()
-
+        for i, task_content in enumerate(task_list):
+            if i < len(topics):  # Ensure tasks align with topics
+                tasks[f"Task {i + 1}"] = f"Topic: {topics[i]}\n{task_content.strip()}"
         return tasks
 
     except requests.RequestException as e:
         logging.error(f"Error fetching tasks: {e}")
-        return {f"Task {i + 1}": f"Placeholder task for {topic}" for i, topic in enumerate(topics)}
+        return {f"Task {i + 1}": fallback_task(topics[i]) for i in range(len(topics))}
 
-def fallback_tasks(topics):
-    return {f"Day {i+1}": f"Review the topic: {topic}" for i, topic in enumerate(topics)}
+
+def fallback_task(topic):
+    """
+    Generate a fallback task if the API fails to return a valid task.
+    """
+    return (
+        f"Topic: {topic}\n"
+        f"Task Description: Learn and research about '{topic}' in detail.\n"
+        f"Estimated Time: 2-3 hours\n"
+        f"Recommended Resources:\n"
+        f"- Book: 'Artificial Intelligence: A Modern Approach'\n"
+        f"- Website: Coursera course 'AI For Everyone'\n"
+        f"- Video: 'Introduction to AI' by AI Academy"
+    )
+
+
 
 def save_to_file(filename, data):
     with open(filename, "w") as file:

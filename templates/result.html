@@ -104,8 +104,12 @@
             <h3>{{ task }}</h3>
             <p>{{ details.replace('\n', '<br>') | safe }}</p>
         </div>
+    {% else %}
+        <p>No tasks were generated. Please try again.</p>
     {% endfor %}
 </div>
+
+
 
 
 
