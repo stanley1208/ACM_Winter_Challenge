@@ -73,8 +73,45 @@
     <label for="days">Days to study:</label>
     <input type="number" id="days" name="days" placeholder="Enter days (e.g., 5)" required>
 
-    <input type="submit" value="Generate Study Plan">
+    <label for="keyPoints">Study Key Points:</label>
+    <input type="text" id="keyPoints" name="keyPoints" placeholder="Enter key point (e.g., Machine Learning)" required>
+    <ul id = "keyPointsList" ></ul> <!--unordered list-->
+    <button type="button" id="addKeyPoint">Add Another Key Point</button>
+    <button type="button" id="clearKeyPoint">Clear</button>
+
+    <br><br><input type="submit" value="Generate Study Plan">
 </form>
+<script>
+    document.getElementById("addKeyPoint").addEventListener("click", function() {
+        const keyPoints = document.getElementById("keyPoints");
+        const keyPointsList = document.getElementById("keyPointsList");
+
+        const keyPoint = keyPoints.value.trim();
+
+        if(keyPoint){
+            const li = document.createElement("li");
+            li.textContent = keyPoint;
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "keyPoints";
+            hiddenInput.value = keyPoint;
+            li.appendChild(hiddenInput);
+
+            keyPointsList.appendChild(li);
+            keyPoints.value = "";
+        }
+        else{
+            alert("Please enter a key point before adding!");
+        }
+    });
+
+    document.getElementById("clearKeyPoint").addEventListener("click", function() {
+        const keyPointsList = document.getElementById("keyPointsList");
+        while (keyPointsList.firstChild) {
+            keyPointsList.removeChild(keyPointsList.firstChild);
+        }
+    });
+</script>
 </body>
 <footer>
     <p>&copy; 2025 Study Assistant. All Rights Reserved.</p>

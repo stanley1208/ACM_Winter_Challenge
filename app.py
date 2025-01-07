@@ -14,6 +14,9 @@ def home():
 
 @app.route("/download_txt", methods=["POST"])
 def download_txt():
+    """
+    Download function
+    """
     from ast import literal_eval  # Use safer eval alternative
 
     # Retrieve content from the form
@@ -45,10 +48,14 @@ def download_txt():
 
 @app.route("/generate", methods=["GET", "POST"])
 def generate():
+    """
+    Get the information from the user, package it up then transfer to main_workflow to handle
+    """
     subject = request.form.get("subject", "").strip()
     hours = int(request.form.get("hours", 0))
     days = int(request.form.get("days", 0))
-    preferences = {"subject": subject, "hours": hours, "days": days}
+    keyPoints = request.form.getlist("keyPointsList")
+    preferences = {"subject": subject, "hours": hours, "days": days, "keyPoints": keyPoints}
 
     result = main_workflow(preferences)
     print("DEBUG: Study Plan:", result["study_plan"])
