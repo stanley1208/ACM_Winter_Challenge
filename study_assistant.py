@@ -90,6 +90,7 @@ def generate_daily_task(subject, topics):
         "  - A title matching the topic.\n"
         "  - A detailed task description.\n"
         "  - Estimated time to complete.\n"
+        "  - The study key points.\n"
         "  - Recommended resources (book, video, and website with links).\n\n"
         + "\n".join([f"- {topic}" for topic in topics])
     )
@@ -128,6 +129,7 @@ def fallback_task(topic):
         f"Topic: {topic}\n"
         f"Task Description: Learn and research about '{topic}' in detail.\n"
         f"Estimated Time: 2-3 hours\n"
+        f"The key points: Machine Learning"
         f"Recommended Resources:\n"
         f"- Book: 'Artificial Intelligence: A Modern Approach'\n"
         f"- Website: Coursera course 'AI For Everyone'\n"
@@ -175,6 +177,10 @@ def show_next_task(tasks):
             break
 
 def main_workflow(preferences):
+    """
+    Get the information from app.py(preferences), which includes subject, hours, days, key points.
+    Use this info to create study plan and task, package it up then return, showing it on the screen
+    """
     study_plan = create_study_plan(preferences)
     topics = [task.split("on ", 1)[-1].strip() for task in study_plan.values()]
 
