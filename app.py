@@ -48,9 +48,13 @@ def download_txt():
 
 @app.route("/generate", methods=["GET", "POST"])
 def generate():
+    """
+    Get the information from the user, package it up then transfer to main_workflow to handle
+    """
     subject = request.form.get("subject", "").strip()
     hours = int(request.form.get("hours", 0))
     days = int(request.form.get("days", 0))
+<<<<<<< HEAD
     keyPoints = request.form.getlist("keyPoints")
     api_key = request.form.get("apiKey", "").strip()
 
@@ -61,6 +65,10 @@ def generate():
         "keyPoints": keyPoints,
         "apiKey": api_key
     }
+=======
+    keyPoints = request.form.getlist("keyPointsList")
+    preferences = {"subject": subject, "hours": hours, "days": days, "keyPoints": keyPoints}
+>>>>>>> a29b327d24e5bd98af073c5b5452339f2f837249
 
     result = main_workflow(preferences)
     return render_template(
