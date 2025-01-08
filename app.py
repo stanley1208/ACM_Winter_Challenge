@@ -14,6 +14,9 @@ def home():
 
 @app.route("/download_txt", methods=["POST"])
 def download_txt():
+    """
+    Download function
+    """
     from ast import literal_eval  # Use safer eval alternative
 
     # Retrieve content from the form
@@ -48,14 +51,21 @@ def generate():
     subject = request.form.get("subject", "").strip()
     hours = int(request.form.get("hours", 0))
     days = int(request.form.get("days", 0))
-    preferences = {"subject": subject, "hours": hours, "days": days}
+    keyPoints = request.form.getlist("keyPoints")
+    api_key = request.form.get("apiKey", "").strip()
+
+    preferences = {
+        "subject": subject,
+        "hours": hours,
+        "days": days,
+        "keyPoints": keyPoints,
+        "apiKey": api_key
+    }
 
     result = main_workflow(preferences)
-    print("DEBUG: Study Plan:", result["study_plan"])
-    print("DEBUG: Tasks:", result["tasks"])  # Add this to check tasks content
-
-    return render_template("result.html",
-                           study_plan=result["study_plan"], tasks=result["tasks"])
+    return render_template(
+        "result.html", study_plan=result["study_plan"], tasks=result["tasks"]
+    )
 
 
 if __name__ == "__main__":
