@@ -171,6 +171,9 @@
       <workItem from="1736276339720" duration="4719000" />
       <workItem from="1736292732572" duration="2698000" />
       <workItem from="1736374725530" duration="3123000" />
+      <workItem from="1736378467036" duration="1449000" />
+      <workItem from="1736467477250" duration="15000" />
+      <workItem from="1737050632846" duration="1032000" />
     </task>
     <servers />
   </component>
@@ -178,7 +181,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ACM_Winter_Challenge_main$app.coverage" NAME="app Coverage Results" MODIFIED="1736377410412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ACM_Winter_Challenge_main$app.coverage" NAME="app Coverage Results" MODIFIED="1737051060052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProject$testing.coverage" NAME="testing Coverage Results" MODIFIED="1735115272959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProject$study_assistant.coverage" NAME="study_assistant Coverage Results" MODIFIED="1735122462743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
